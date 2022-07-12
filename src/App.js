@@ -3,6 +3,7 @@ import './App.css';
 import TOC from "./components/TOC"
 import Subject from './components/Subject';
 import Content  from './components/Content';
+import Control  from './components/Control';
 import { Component } from 'react';
 
 
@@ -31,7 +32,7 @@ class App extends Component {
       var i=0;
       while(i < this.state.contents.length) {
         var data = this.state.contents[i];
-        if(data.id == this.state.selected_content_id) {
+        if(data.id === this.state.selected_content_id) {
           _title = data.title;
           _desc = data.descript;
           break;
@@ -69,8 +70,12 @@ class App extends Component {
           });
         }.bind(this)}
         data={this.state.contents}
-        >          
-        </TOC>
+        ></TOC>
+        <Control onChangeMode={function(_mode) {
+          this.setState({
+            mode:_mode,
+          })
+        }.bind(this)}></Control>        
         <Content title={_title} descript={_desc}></Content>
       </div>
     )
