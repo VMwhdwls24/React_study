@@ -11,6 +11,7 @@ import { Component } from 'react';
 class App extends Component {
   constructor(props) {
     super(props);
+    this.max_content_id = 3;
     this.state = {
       mode:'create',
       selected_content_id:1,
@@ -45,7 +46,13 @@ class App extends Component {
     } else if (this.state.mode === 'create') {
       _article = <CreateContent onSubmit={function(_title, _desc){
         // title, desc인 컨텐츠 추가
-        console.log(_title, _desc);
+        this.max_content_id = this.max_content_id + 1;
+        var _contents = this.state.contents.concat(
+          {id:this.max_content_id, title:_title, descript: _desc}
+        )
+        this.setState({
+          contents:_contents
+        })
       }.bind(this)}></CreateContent>
     }
 
