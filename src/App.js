@@ -43,7 +43,10 @@ class App extends Component {
       }
       _article = <ReadContent title={_title} descript={_desc}></ReadContent>
     } else if (this.state.mode === 'create') {
-      _article = <CreateContent title={_title} descript={_desc}></CreateContent>
+      _article = <CreateContent onSubmit={function(_title, _desc){
+        // title, desc인 컨텐츠 추가
+        console.log(_title, _desc);
+      }.bind(this)}></CreateContent>
     }
 
     return (
@@ -51,7 +54,7 @@ class App extends Component {
         <Subject
           title={this.state.subject.title}
           sub={this.state.subject.sub}
-          onChangePage={function() {
+          onChangePage={function() { 
             this.setState({mode:'welcome'});
           }.bind(this)}
           >
