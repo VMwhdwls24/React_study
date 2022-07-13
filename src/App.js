@@ -47,6 +47,7 @@ class App extends Component {
       _article = <CreateContent onSubmit={function(_title, _desc){
         // title, desc인 컨텐츠 추가
         this.max_content_id = this.max_content_id + 1;
+        // concat을 안쓰면 shouldComponentUpdate 사용 불가
         var _contents = this.state.contents.concat(
           {id:this.max_content_id, title:_title, descript: _desc}
         )
