@@ -4,6 +4,7 @@ import TOC from "./components/TOC"
 import Subject from './components/Subject';
 import ReadContent  from './components/ReadContent';
 import CreateContent  from './components/CreateContent';
+import UpdateContent  from './components/UpdateContent';
 import Control  from './components/Control';
 import { Component } from 'react';
 
@@ -13,7 +14,7 @@ class App extends Component {
     super(props);
     this.max_content_id = 3;
     this.state = {
-      mode:'create',
+      mode:'read',
       selected_content_id:1,
       subject:{title:'WEB', sub:'Wolrd Wide Web!'},
       welcome:{title:'Welcome', descript:'Hello, React!!'},
@@ -24,7 +25,18 @@ class App extends Component {
       ]
     }
   }
-  render() {
+  getReadContent() {
+    var i=0;
+      while(i < this.state.contents.length) {
+        var data = this.state.contents[i];
+        if(data.id === this.state.selected_content_id) {
+          return data;
+          break;
+        }
+        i += 1;
+      }
+  }
+  getContent() {
     console.log('App render');
     var _title, _desc, _article = null;
     if(this.state.mode === 'welcome') {
@@ -32,17 +44,8 @@ class App extends Component {
       _desc = this.state.welcome.descript;
       _article = <ReadContent title={_title} descript={_desc}></ReadContent>
     } else if(this.state.mode === 'read') {
-      var i=0;
-      while(i < this.state.contents.length) {
-        var data = this.state.contents[i];
-        if(data.id === this.state.selected_content_id) {
-          _title = data.title;
-          _desc = data.descript;
-          break;
-        }
-        i += 1;
-      }
-      _article = <ReadContent title={_title} descript={_desc}></ReadContent>
+      var _content = this.getReadContent();
+      _article = <ReadContent title={_content.title} descript={_content.descript}></ReadContent>
     } else if (this.state.mode === 'create') {
       _article = <CreateContent onSubmit={function(_title, _desc){
         // title, desc인 컨텐츠 추가
@@ -55,7 +58,23 @@ class App extends Component {
           contents:_contents
         })
       }.bind(this)}></CreateContent>
+    } else if (this.state.mode === 'update') {
+      _content = this.getReadContent();
+      _article = <UpdateContent data={_content} onSubmit={function(_title, _desc){
+        // title, desc인 컨텐츠 추가
+        this.max_content_id = this.max_content_id + 1;
+        // concat을 안쓰면 shouldComponentUpdate 사용 불가
+        var _contents = this.state.contents.concat(
+          {id:this.max_content_id, title:_title, descript: _desc}
+        )
+        this.setState({
+          contents:_contents
+        })
+      }.bind(this)}></UpdateContent>
     }
+    return _article;
+  }
+  render() {
 
     return (
       <div className="App">
@@ -93,7 +112,7 @@ class App extends Component {
             mode:_mode
           });
         }.bind(this)}></Control>        
-        {_article}
+        {this.getContent()}
       </div>
     )
   }
