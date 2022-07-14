@@ -4,7 +4,8 @@ class UpdateContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: this.props.data.title ,
+      id: this.props.data.id,
+      title: this.props.data.title,
       desc: this.props.data.descript
     }
     this.inputFormHandler = this.inputFormHandler.bind(this);
@@ -20,13 +21,15 @@ class UpdateContent extends Component {
           <h2>Update</h2>
           <form action='/udpate_process' method='post'
           onSubmit={function(e) { 
-            e.preventDefault();
+            e.preventDefault();  
             this.props.onSubmit(
-              e.target.title.value,
-              e.target.desc.value
+              this.state.id,
+              this.state.title,
+              this.state.desc
             );  
           }.bind(this)}
           >
+            <input type="hidden" name="id" value={this.state.id}/>
             <p>
               <input type="text" 
               name="title" 
